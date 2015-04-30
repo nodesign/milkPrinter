@@ -12,7 +12,7 @@ List<Status> tweets;
 
 int currentTweet;
 
-RShape shp[] = new RShape[26];
+RShape shp[] = new RShape[63];
 
 void setup() {
 
@@ -50,14 +50,18 @@ void draw() {
   background(255);
 
   Status status = tweets.get(0);
-  String tweet  = status.getText().toUpperCase();
+  String tweet  = status.getText(); //.toUpperCase();
   
   println(tweet);
   
   for (int i=0; i<tweet.length(); i++) {
     int sel = int(tweet.charAt(i));
-    if ((sel>=65) && (sel<shp.length+65)) 
+    if ((sel>=65) && (sel<shp.length+65)) { 
+     
       RG.shape(shp[sel-65], 20*i, height/2);
+ 
+    }
+      
   }
 }
 
