@@ -42,17 +42,22 @@ void setup() {
     String letter = str(65+i); 
     shp[i] = RG.loadShape(letter+".svg");
   }
+  noLoop();
   //shp = RG.centerIn(shp, g);
 } 
 
 void draw() {
   background(255);
-  //translate(mouseX, mouseY);
+
+  Status status = tweets.get(0);
+  String tweet  = status.getText().toUpperCase();
   
-  String b = "BOJANA";
-  for (int i=0; i<b.length(); i++) {
-    int sel = int(b.charAt(i));
-    RG.shape(shp[sel-65], 20*i, height/2);
+  println(tweet);
+  
+  for (int i=0; i<tweet.length(); i++) {
+    int sel = int(tweet.charAt(i));
+    if ((sel>=65) && (sel<shp.length+65)) 
+      RG.shape(shp[sel-65], 20*i, height/2);
   }
 }
 
@@ -83,7 +88,8 @@ void refreshTweets()
 
     println("Updated Tweets"); 
 
-    delay(30000);
+    delay(500);
+    redraw();
   }
 }
 
