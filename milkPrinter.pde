@@ -9,10 +9,10 @@ import geomerative.*;
 Twitter twitter;
 String searchString = "weio";
 List<Status> tweets;
-
+boolean tweetLoaded=false;
 int currentTweet;
 
-RShape shp[] = new RShape[63];
+ArrayList<SVGReader> shp = new ArrayList<SVGReader>();
 
 void setup() {
 
@@ -38,31 +38,34 @@ void setup() {
   // VERY IMPORTANT: Allways initialize the library before using it
   RG.init(this);
 
-  for (int i=0;i<shp.length; i++) {
-    String letter = str(65+i); 
-    shp[i] = RG.loadShape(letter+".svg");
-  }
   noLoop();
   //shp = RG.centerIn(shp, g);
 } 
 
 void draw() {
-  background(255);
-
-  Status status = tweets.get(0);
+  //background(255);
+  if(tweetLoaded==false){
+  Status status = tweets.get(1);
   String tweet  = status.getText(); //.toUpperCase();
   
   println(tweet);
   
   for (int i=0; i<tweet.length(); i++) {
     int sel = int(tweet.charAt(i));
-    if ((sel>=65) && (sel<shp.length+65)) { 
-     
-      RG.shape(shp[sel-65], 20*i, height/2);
+    if ((sel>=65) && (sel<=127)) { 
+       shp.add(new SVGReader(this,sel+".svg", 10, 10,  10*i, height/2)); 
  
     }
       
   }
+  
+  for(int i=0;i<shp.size();i++){
+   SVGReader s = (SVGReader) shp.get(i);
+   s.display(1,0,0);}
+   tweetLoaded=true;
+ 
+ }
+   
 }
 
 
