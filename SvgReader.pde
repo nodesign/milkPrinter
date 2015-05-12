@@ -27,15 +27,15 @@ public class SVGReader {
     this.parent = parent;
     //run setups for geomerative library
     RG.init(parent);
-   // RG.setPolygonizer(RG.UNIFORMLENGTH); 
-   // RG.setPolygonizerLength(0.01);
+    // RG.setPolygonizer(RG.UNIFORMLENGTH); 
+    // RG.setPolygonizerLength(0.01);
     RG.setPolygonizer(RG.ADAPTATIVE); 
     RG.setPolygonizerAngle(10);
     targetWidth=widths;
     targetHeight=heights;
     Xorigine=xorigine;
     Yorigine=yorigine;
-   
+
     //load SVG into shape
     rs = RG.loadShape(svgName);
 
@@ -120,27 +120,27 @@ public class SVGReader {
     if (number<colorpresent.size()) {
 
       return colorpresent.get(number);
-
     }
     else {
       println("no such color");
       return -1;
     }
   }
-  
-  
-  int returnColorNum(){
-    return colorpresent.size();}
-    
 
 
- void display(float scale, float x, float y){
-   pushMatrix();
-   translate(x+Xorigine,y+Yorigine);
-   scale(scale*scaler);
-rs.draw();   
-popMatrix();
- }
+  int returnColorNum() {
+    return colorpresent.size();
+  }
+
+
+
+  void display(float scale, float x, float y) {
+    pushMatrix();
+    translate(x+Xorigine, y+Yorigine);
+    scale(scale);
+    rs.draw();   
+    popMatrix();
+  }
   int findcolorstart(int couleur) {
     int taille=ve.size();
     for (int i=1;i<taille;i++) {
@@ -212,11 +212,11 @@ class Point implements Comparable {
     float d2=pt.z;
     if (col1==col2) {
       if (d1 < d2) {
-       // return -1;
+        // return -1;
         return 0;
       } 
       else if (d1 > d2) {
-       // return 1;
+        // return 1;
         return 0;
       } 
       else {
@@ -233,6 +233,5 @@ class Point implements Comparable {
     }
   }
 }
-
 
 
