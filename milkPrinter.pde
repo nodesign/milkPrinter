@@ -4,8 +4,6 @@ import twitter4j.auth.*;
 import twitter4j.api.*;
 import java.util.*;
 
-import geomerative.*;
-
 boolean offline = true;
 
 Twitter twitter;
@@ -13,18 +11,11 @@ String searchString = "weio";
 List<Status> tweets;
 boolean tweetLoaded=false;
 int currentTweet;
-int size = 20;
 
 
-int leftMargin = 30;
-int rightMargin = 30;
-
-ArrayList<SVGReader> shp = new ArrayList<SVGReader>();
-Map<String, Integer> kernTable = new HashMap<String, Integer>();
+PFont font;
 
 void setup() {
-
-  initKernnings();
 
   if (!offline) { 
     ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -43,14 +34,19 @@ void setup() {
 
     thread("refreshTweets");
   }
+  
+  
+  String[] fontList = PFont.list();
+  
+  for (int i=0; i<fontList.length; i++) println(fontList[i]);
+
+  
+  font = createFont("Lato-Black", 64);
+  textFont(font);  
+
   size(210*2, 297*2);
   smooth();
-
-  // VERY IMPORTANT: Allways initialize the library before using it
-  RG.init(this);
-
   noLoop();
-  //shp = RG.centerIn(shp, g);
 } 
 
 void draw() {
@@ -59,37 +55,16 @@ void draw() {
     String tweet;
     if (!offline) {
       Status status = tweets.get(1);
-      tweet  = status.getText(); //.toUpperCase();
+      tweet  = status.getText();
 
       println(tweet);
     } 
     else {
       tweet = "There are two moralities - that of the Master and that of the Slave. The words of Machiavelli are deemed evil only by the Slave";
+      fill(0);
+      textAlign(CENTER,CENTER);
+      text(tweet, 100, 100);
     }
-    
-    int acc = 0;
-    for (int i=0; i<tweet.length(); i++) {
-      char sel = tweet.charAt(i);
-      float kerning = 0;
-
-      if (i>0) {
-        char sel2 = tweet.charAt(i-1); 
-        print(sel + " " + sel2 + " ");
-        kerning = map(getKerning(sel, sel2), -500, 500, -20, 20);
-        println(size + kerning + " *******************************************" );
-      } 
-      
-      acc += int(size + kerning);
-      if ((sel>=65) && (sel<=127)) {   
-         shp.add(new SVGReader(this, int(sel)+".svg", size, size, acc, height/2));
-       }
-    }
-
-    for (int i=0;i<shp.size();i++) {
-      SVGReader s = (SVGReader) shp.get(i);
-      s.display(1, 0, 0);
-    }
-    tweetLoaded=true;
   }
 }
 
@@ -120,10 +95,8 @@ void refreshTweets()
 
     println("Updated Tweets"); 
 
-    delay(500);
+    delay(10000);
     redraw();
   }
 }
-
-
 
