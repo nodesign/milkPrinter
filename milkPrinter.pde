@@ -12,8 +12,16 @@ List<Status> tweets;
 boolean tweetLoaded=false;
 int currentTweet;
 
-
 PFont font;
+
+int resolutionMultiplier = 3;
+
+int margins =  18  *resolutionMultiplier;
+int fontSize = 21  *resolutionMultiplier;
+int leading =  16  *resolutionMultiplier;
+
+
+PImage logo;
 
 void setup() {
 
@@ -34,19 +42,20 @@ void setup() {
 
     thread("refreshTweets");
   }
-  
-  
+
+
   String[] fontList = PFont.list();
-  
   for (int i=0; i<fontList.length; i++) println(fontList[i]);
 
-  
-  font = createFont("Lato-Black", 64);
+
+  font = createFont("Helvetica-Bold", fontSize);
   textFont(font);  
 
-  size(210*2, 297*2);
-  smooth();
+  size(210*resolutionMultiplier, 297*resolutionMultiplier);
+  //smooth();
   noLoop();
+  logo = loadImage("milk2.jpg");
+  
 } 
 
 void draw() {
@@ -61,9 +70,32 @@ void draw() {
     } 
     else {
       tweet = "There are two moralities - that of the Master and that of the Slave. The words of Machiavelli are deemed evil only by the Slave";
-      fill(0);
-      textAlign(CENTER,CENTER);
-      text(tweet, 100, 100);
+    }
+
+
+    fill(0);
+    textAlign(LEFT, LEFT);
+    textLeading(leading);
+    text(tweet, margins, margins, width-margins*2, height-margins*2);
+    
+    float w = logo.width/(4.0-resolutionMultiplier);
+    float h = logo.height/(4.0-resolutionMultiplier);
+    image(logo, (width-w)/2.0, height-h-margins/2.0, w,h);
+
+    //calculatePoints();
+  }
+}
+
+void calculatePoints() {
+  for (int i=0; i<height; i++) {
+    for (int j=0; j<width; j++) {
+
+      color a = get(j, i);
+      if (red(a) < 30) {
+        float x = float(j)/float(resolutionMultiplier);
+        float y = float(i)/float(resolutionMultiplier);
+        println(x, y);
+      }
     }
   }
 }
