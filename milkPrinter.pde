@@ -4,7 +4,7 @@ import twitter4j.auth.*;
 import twitter4j.api.*;
 import java.util.*;
 
-boolean offline = false;
+boolean offline = true;
 
 Twitter twitter;
 String searchString = "nodesign";
@@ -14,15 +14,17 @@ int currentTweet;
 
 PFont font;
 
-int resolutionMultiplier = 3;
+int resolutionMultiplier = 1;
 
 int margins =  18  *resolutionMultiplier;
 int fontSize = 21  *resolutionMultiplier;
 int leading =  16  *resolutionMultiplier;
 
 PImage logo;
-
+PGraphics pg;
 boolean print = false;
+
+PImage printImage;
 
 void setup() {
 
@@ -44,21 +46,26 @@ void setup() {
   }
 
 
-  String[] fontList = PFont.list();
-  for (int i=0; i<fontList.length; i++) println(fontList[i]);
+  //String[] fontList = PFont.list();
+ // for (int i=0; i<fontList.length; i++) println(fontList[i]);
+
+
+  size(210*resolutionMultiplier, 297*resolutionMultiplier);
+  pg = createGraphics(210*resolutionMultiplier, 297*resolutionMultiplier);
+  
 
 
   font = createFont("Helvetica-Bold", fontSize);
-  textFont(font);  
+  pg.textFont(font);  
 
-  size(210*resolutionMultiplier, 297*resolutionMultiplier);
   //smooth();
   noLoop();
   logo = loadImage("milk2.jpg");
 } 
 
 void draw() {
-  background(255);
+  pg.beginDraw();
+  pg.background(255);
 
   String tweet;
   if (!offline) {
@@ -73,14 +80,21 @@ void draw() {
   }
 
 
-  fill(0);
-  textAlign(LEFT, LEFT);
-  textLeading(leading);
-  text(tweet, margins, margins, width-margins*2, height-margins*2);
+  pg.fill(0);
+  pg.textAlign(LEFT, LEFT);
+  pg.textLeading(leading);
+
+  pg.text(tweet, margins, pg.height/4 , 100, pg.height-margins*2);
 
   float w = logo.width/(4.0-resolutionMultiplier);
   float h = logo.height/(4.0-resolutionMultiplier);
-  image(logo, (width-w)/2.0, height-h-margins/2.0, w, h);
+  pg.image(logo, (pg.width-w)/2.0, pg.height-h-margins/2.0-pg.height/8, w, h);
+  pg.endDraw();
+  
+  
+  image(pg, 0,0);
+  
+  
   if (print) {
     calculatePoints();
     print = false;
@@ -89,10 +103,10 @@ void draw() {
 }
 
 void calculatePoints() {
-  for (int i=0; i<height; i++) {
-    for (int j=0; j<width; j++) {
+  for (int i=0; i<pg.height; i++) {
+    for (int j=0; j<pg.width; j++) {
 
-      color a = get(j, i);
+      color a = pg.get(j, i);
       if (red(a) < 30) {
         float x = float(j)/float(resolutionMultiplier);
         float y = float(i)/float(resolutionMultiplier);
